@@ -94,9 +94,9 @@ namespace Proteins
 				}
 				string edgeType = parts[3];
 
-				int cat1 = int.Parse(parts[4]);
-				int cat2 = int.Parse(parts[5]);
-				int cat3 = int.Parse(parts[6]);
+				int cat1 = int.Parse(parts[4]) * 100;
+				int cat2 = int.Parse(parts[5]) * 100;
+				int cat3 = int.Parse(parts[6]) * 100;
 
 				if (!uniqueIds.ContainsKey(id))
 				{
@@ -104,8 +104,8 @@ namespace Proteins
 					idByName.Add(name, numNodes);
 					++numNodes;
 
-//					Color color = new Color((float)cat1, (float)cat2, (float)cat3);
-					Color color = Color.White;
+					Color color = new Color( cat1  + 200, cat2 + 200, cat3 + 200);
+					//Color color = Color.White;
 					AddNode(new ProteinNode(name, 1.0f, color));
 					 
 				}

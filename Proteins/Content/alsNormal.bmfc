@@ -1,0 +1,57 @@
+# AngelCode Bitmap Font Generator configuration file
+fileVersion=1
+
+# font settings
+fontName=ALS Schlange sans
+fontFile=
+charSet=0
+fontSize=19
+aa=1
+scaleH=100
+useSmoothing=1
+isBold=0
+isItalic=0
+useUnicode=1
+disableBoxChars=1
+outputInvalidCharGlyph=0
+dontIncludeKerningPairs=0
+useHinting=1
+renderFromOutline=1
+useClearType=0
+
+# character alignment
+paddingDown=0
+paddingUp=0
+paddingRight=0
+paddingLeft=0
+spacingHoriz=1
+spacingVert=1
+useFixedHeight=0
+forceZero=0
+
+# output file
+outWidth=1024
+outHeight=1024
+outBitDepth=32
+fontDescFormat=1
+fourChnlPacked=0
+textureFormat=tga
+textureCompression=0
+alphaChnl=0
+redChnl=4
+greenChnl=4
+blueChnl=4
+invA=0
+invR=0
+invG=0
+invB=0
+
+# outline
+outlineThickness=0
+
+# selected chars
+chars=32-126,160-255,1025-1036,1038-1103,1105-1116,1118-1119,1122-1123,1138-1141,1168-1181,1184-1189,1194
+chars=1195,1198-1203,1206-1211,1216,1219-1220,1223-1224,1232-1247,1250-1259,1262-1269,1272-1273,8211-8212
+chars=8216-8218,8220-8222,8224-8226,8230,8240,8249-8250,8260
+
+# imported icon images

@@ -59,6 +59,7 @@ namespace Proteins
 		{
 			//	enable object tracking :
 			Parameters.TrackObjects = true;
+			Parameters.MsaaLevel = 8;
 
 			//	uncomment to enable debug graphics device:
 			//	(MS Platform SDK must be installed)
@@ -94,8 +95,8 @@ namespace Proteins
 			delay2 = 3000;
 
 
-			nodeHighlightColorNeg = Color.Red;
-			nodeHighlightColorPos = Color.Green;
+			nodeHighlightColorNeg = new Color(221,0,41) ;// Color.Red;
+			nodeHighlightColorPos = new Color(0,221,180) ; //Color.Green;
 
 		}
 
@@ -114,7 +115,7 @@ namespace Proteins
 			//	load content & create graphics and audio resources here:
 
 			// Add graphical user interface:
-			font = Content.Load<SpriteFont>("stencil");
+			font = Content.Load<SpriteFont>("alsNormal");
 			var UI = GetService<UserInterface>();
 			UI.RootFrame = new Frame(this, 0, 0, 800, 600, "", Color.Zero);
 
@@ -127,49 +128,50 @@ namespace Proteins
 			{
 				Font = font,
 				Border = 1,
-				BorderColor = Color.Red,
-				TextAlignment = Alignment.MiddleCenter
+				BorderColor = Color.White,//Color.Red,
+				TextAlignment = Alignment.MiddleCenter,
+			
 			};
 			button2 = new Frame(this,x, y + (btnHeight + padding), btnWidth, btnHeight, "2", Color.Zero)
 			{
 				Font = font,
 				Border = 1,
-				BorderColor = Color.Red,
+				BorderColor = Color.White,//Color.Red,
 				TextAlignment = Alignment.MiddleCenter
 			};
 			button3 = new Frame(this, x, y + 2*(btnHeight + padding), btnWidth, btnHeight, "3", Color.Zero)
 			{
 				Font = font,
 				Border = 1,
-				BorderColor = Color.Red,
+				BorderColor = Color.White,//Color.Red,
 				TextAlignment = Alignment.MiddleCenter
 			};
 			button4 = new Frame(this, x, y + 3*(btnHeight + padding), btnWidth, btnHeight, "4", Color.Zero)
 			{
 				Font = font,
 				Border = 1,
-				BorderColor = Color.Red,
+				BorderColor = Color.White,//Color.Red,
 				TextAlignment = Alignment.MiddleCenter
 			};
 			button5 = new Frame(this, x, y + 4*(btnHeight + padding), btnWidth, btnHeight, "5", Color.Zero)
 			{
 				Font = font,
 				Border = 1,
-				BorderColor = Color.Red,
+				BorderColor = Color.White,//Color.Red,
 				TextAlignment = Alignment.MiddleCenter
 			};
 			button6 = new Frame(this, x, y + 5*(btnHeight + padding), btnWidth, btnHeight, "6", Color.Zero)
 			{
 				Font = font,
 				Border = 1,
-				BorderColor = Color.Red,
+				BorderColor = Color.White,//Color.Red,
 				TextAlignment = Alignment.MiddleCenter
 			};
 			resetBtn = new Frame(this, x, y + 6 * (btnHeight + padding), btnWidth, btnHeight, "R", Color.Zero)
 			{
 				Font = font,
 				Border = 1,
-				BorderColor = Color.Red,
+				BorderColor = Color.White,//Color.Red,
 				TextAlignment = Alignment.MiddleCenter
 			};
 			UI.RootFrame.Add(button1);
@@ -188,9 +190,45 @@ namespace Proteins
 			button6.Click += (s, e) => action6();
 			resetBtn.Click += (s, e) => ResetGraph();
 
+			button1.StatusChanged += (s, e) =>
+            {
+                if (e.Status == FrameStatus.None)       { button1.BackColor = Color.Zero; }
+                if (e.Status == FrameStatus.Hovered)    { button1.BackColor = new Color (20, 20, 20); }
+            };
+			button2.StatusChanged += (s, e) =>
+            {
+                if (e.Status == FrameStatus.None)       { button2.BackColor = Color.Zero; }
+                if (e.Status == FrameStatus.Hovered)    { button2.BackColor = new Color (20, 20, 20); }
+            };
+			button3.StatusChanged += (s, e) =>
+            {
+                if (e.Status == FrameStatus.None)       { button3.BackColor = Color.Zero; }
+                if (e.Status == FrameStatus.Hovered)    { button3.BackColor = new Color (20, 20, 20); }
+            };
+			button4.StatusChanged += (s, e) =>
+            {
+                if (e.Status == FrameStatus.None)       { button4.BackColor = Color.Zero; }
+                if (e.Status == FrameStatus.Hovered)    { button4.BackColor = new Color (20, 20, 20); }
+            };
+			button5.StatusChanged += (s, e) =>
+            {
+                if (e.Status == FrameStatus.None)       { button5.BackColor = Color.Zero; }
+                if (e.Status == FrameStatus.Hovered)    { button5.BackColor = new Color (20, 20, 20); }
+            };
+			button6.StatusChanged += (s, e) =>
+            {
+                if (e.Status == FrameStatus.None)       { button6.BackColor = Color.Zero; }
+                if (e.Status == FrameStatus.Hovered)    { button6.BackColor = new Color (20, 20, 20); }
+            };
+			resetBtn.StatusChanged += (s, e) =>
+            {
+                if (e.Status == FrameStatus.None)       { resetBtn.BackColor = Color.Zero; }
+                if (e.Status == FrameStatus.Hovered)    { resetBtn.BackColor = new Color (20, 20, 20); }
+            };
+
 			var gs = GetService<GraphSystem>();
 			gs.BackgroundColor = Color.Black;
-			gs.BlendMode = BlendState.Additive;
+			gs.BlendMode = BlendState.AlphaBlend; //BlendState.Additive;
 
 			protGraph.ReadFromFile("../../../../signalling_table.csv");
 
@@ -222,8 +260,7 @@ namespace Proteins
 			graphSys.Unpause();
 		}
 
-
-
+		
 		/// <summary>
 		/// Disposes game
 		/// </summary>
@@ -242,32 +279,38 @@ namespace Proteins
 		void action1()
 		{
 			startPropagate("YAP");
+			Console.WriteLine("Click on 1");
 		}
 
 		void action2()
 		{
 			startPropagate("PKCa");
+			Console.WriteLine("Click on 2");
 		}
 
 		void action3()
 		{
 			startPropagate("Ecad");
+			Console.WriteLine("Click on 3");
 		}
 
 		void action4()
 		{
 			startPropagate("PKCa");
 			startPropagate("Ecad");
+			Console.WriteLine("Click on 4");
 		}
 
 		void action5()
 		{
 			startPropagate("FZD");
+			Console.WriteLine("Click on 5");
 		}
 
 		void action6()
 		{
 			startPropagate("bCAT");
+			Console.WriteLine("Click on 6");
 		}
 
 

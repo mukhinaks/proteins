@@ -95,7 +95,7 @@ namespace GraphVis {
 			set
 			{
 				if (value < 0) { linkOpacity = 0; }
-				else if (value > 1) { linkOpacity = 1; }
+				//else if (value > 1) { linkOpacity = 1; }
 				else { linkOpacity = value; }
 			}
 		}
@@ -266,7 +266,7 @@ namespace GraphVis {
 			HighlightNodeColor	= new Vector4(0, 1, 0, 1);
 			HighlightEdgeColor	= new Vector4(0, 1, 0, 1);
 			BackgroundColor		= Color.White;
-			BlendMode			= BlendState.Additive;
+			BlendMode			= BlendState.Additive; 
 			AnchorToNodes		= false;
 
 			highlightNodesList = new List<Tuple<StructuredBuffer, HighlightParams>>();
@@ -297,13 +297,7 @@ namespace GraphVis {
 			lay.UseGPU = Config.UseGPU;
 			lay.RunPause = LayoutSystem.State.PAUSE;
 
-			factory = new StateFactory( renderShader, typeof(RenderFlags), ( plState, comb ) => 
-			{
-				plState.RasterizerState	= RasterizerState.CullNone;
-				plState.BlendState = BlendMode;
-				plState.DepthStencilState = DepthStencilState.Readonly;
-				plState.Primitive		= Primitive.PointList;
-			} );
+			factory = new StateFactory( renderShader, typeof(RenderFlags), ( plState,  comb ) => Enum( plState, (RenderFlags) comb) );
 
 			paramsCB			=	new ConstantBuffer( Game.GraphicsDevice, typeof(Params) );
 			particleMass		=	1.0f;
@@ -322,6 +316,23 @@ namespace GraphVis {
 			base.Initialize();
 		}
 
+		void Enum ( PipelineState plState, RenderFlags flag ){
+				plState.RasterizerState	= RasterizerState.CullNone;
+				plState.BlendState		= BlendState.AlphaBlend;//BlendMode;
+				plState.DepthStencilState = DepthStencilState.Default;
+				plState.Primitive		= Primitive.PointList;
+
+				//if (flag.HasFlag(RenderFlags.SELECTION))
+				//{
+				//	plState.BlendState = BlendState.Screen;
+				//	plState.DepthStencilState = DepthStencilState.Readonly;
+				//}
+				if (flag.HasFlag(RenderFlags.POINT))
+				{
+					//plState.BlendState = BlendState.Screen;
+					//plState.DepthStencilState = DepthStencilState.Default;
+				}
+			}
 
 		public void Pause()
 		{
@@ -741,7 +752,7 @@ namespace GraphVis {
 		/// </summary>
 		/// <param name="gameTime"></param>
 		/// <param name="stereoEye"></param>
-		public override void Draw ( GameTime gameTime, Fusion.Graphics.StereoEye stereoEye )
+		public override void Draw ( GameTime gameTime, StereoEye stereoEye )
 		{
 			var device	=	Game.GraphicsDevice;
 			var cam = Game.GetService<GreatCircleCamera>();
@@ -760,7 +771,6 @@ namespace GraphVis {
 
 			// Render: -----------------------------------------------------------------
 			Params param = new Params();
-
 			param.View			= cam.GetViewMatrix(stereoEye);
 			param.Projection	= cam.GetProjectionMatrix(stereoEye);
 			param.SelectedNode	= referenceNodeIndex;
@@ -786,7 +796,7 @@ namespace GraphVis {
 
 			device.ResetStates();
 			device.ClearBackbuffer( BackgroundColor );
-			device.SetTargets( null, device.BackbufferColor );
+			device.SetTargets( device.BackbufferDepth, device.BackbufferColor );
 			paramsCB.SetData(parameters);
 
 			device.ComputeShaderConstants	[0] = paramsCB;
@@ -797,42 +807,12 @@ namespace GraphVis {
 			device.PixelShaderSamplers		[0] = SamplerState.LinearWrap;
 
 			int anchorFlag = (AnchorToNodes ? (int)RenderFlags.RELATIVE_POS : (int)RenderFlags.ABSOLUTE_POS);
-			
-			// draw points: ---------------------------------------------------------------------------
-			device.PipelineState = factory[(int)RenderFlags.DRAW|(int)RenderFlags.POINT|anchorFlag];
-			device.SetCSRWBuffer( 0, null );
-			device.GeometryShaderResources	[2] = ls.CurrentStateBuffer;
-			
-//			device.PixelShaderResources		[0] = particleTex;
-			device.PixelShaderResources		[0] = atlas.Texture;
-			device.Draw(nodeList.Count, 0);
 
-								
 			// draw lines: ----------------------------------------------------------------------------
 			device.PipelineState = factory[(int)RenderFlags.DRAW|(int)RenderFlags.LINE|anchorFlag];
 			device.GeometryShaderResources	[2] = ls.CurrentStateBuffer;
 			device.GeometryShaderResources	[3] = ls.LinksBuffer;
 			device.Draw( edgeList.Count, 0 );
-
-
-
-			// draw highlighted points: ---------------------------------------------------------------
-			device.PipelineState = factory[(int)RenderFlags.DRAW | (int)RenderFlags.SELECTION|anchorFlag];
-			device.PixelShaderResources		[0] = highlightTex;
-
-			foreach (var high in highlightNodesList)
-			{
-				device.GeometryShaderResources[4] = high.Item1;
-				parameters.highNodeColor = high.Item2.color.ToVector4();
-				paramsCB.SetData(parameters);
-				int num = high.Item2.number;
-				device.Draw(num, 0);
-			}
-
-			// draw highlighted lines: ----------------------------------------------------------------
-	//		device.PipelineState = factory[(int)RenderFlags.DRAW | (int)RenderFlags.HIGH_LINE|anchorFlag];
-	//		device.GeometryShaderResources	[5] = highlightedEdgesBuffer;
-	//		device.Draw(highlightedEdgesBuffer.GetStructureCount(), 0);
 
 
 			// draw sparks: ---------------------------------------------------------------------------
@@ -858,6 +838,42 @@ namespace GraphVis {
 				device.GeometryShaderResources	[6] = sparkBuffer;
 				device.Draw(sparkList.Count, 0);
 			}
+			
+			
+
+
+			// draw highlighted points: ---------------------------------------------------------------
+			device.PipelineState = factory[(int)RenderFlags.DRAW | (int)RenderFlags.SELECTION|anchorFlag];
+			device.PixelShaderResources		[0] = highlightTex;
+			device.SetTargets( device.BackbufferDepth, device.BackbufferColor );
+
+			foreach (var high in highlightNodesList)
+			{
+				device.GeometryShaderResources[4] = high.Item1;
+				parameters.highNodeColor = high.Item2.color.ToVector4();
+				paramsCB.SetData(parameters);
+				int num = high.Item2.number;
+				device.Draw(num, 0);
+			}
+
+
+			// draw points: ---------------------------------------------------------------------------
+			device.PipelineState = factory[(int)RenderFlags.DRAW|(int)RenderFlags.POINT|anchorFlag];
+			device.SetCSRWBuffer( 0, null );
+			device.GeometryShaderResources	[2] = ls.CurrentStateBuffer;
+			
+//			device.PixelShaderResources		[0] = particleTex;
+			device.PixelShaderResources		[0] = atlas.Texture;
+			device.Draw(nodeList.Count, 0);
+
+								
+			// draw highlighted lines: ----------------------------------------------------------------
+	//		device.PipelineState = factory[(int)RenderFlags.DRAW | (int)RenderFlags.HIGH_LINE|anchorFlag];
+	//		device.GeometryShaderResources	[5] = highlightedEdgesBuffer;
+	//		device.Draw(highlightedEdgesBuffer.GetStructureCount(), 0);
+
+
+			
 		}
 	}
 }

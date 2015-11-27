@@ -183,7 +183,7 @@ void GSMain( point VSOutput inputPoint[1], inout TriangleStream<GSOutput> output
 #endif // RELATIVE_POS
 
 	float4 color	=	sp.Color;
-	float sz		=	0.9f * Params.nodeScale;
+	float sz		=	0.7f * Params.nodeScale;
 	float4 posV		=	mul( pos, Params.View );
 
 	p0.Position = mul( posV + float4( sz, sz, 0, 0 ) , Params.Projection );		
@@ -277,55 +277,198 @@ void GSMain( point VSOutput inputPoint[1], inout TriangleStream<GSOutput> output
 
 // draw lines: ------------------------------------------------------------------------------------
 #ifdef LINE
-[maxvertexcount(2)]
-void GSMain( point VSOutput inputLine[1], inout LineStream<GSOutput> outputStream )
+[maxvertexcount(40)]
+void GSMain( point VSOutput inputLine[1], inout TriangleStream<GSOutput> outputStream )
 {
-	GSOutput p1, p2;
-
 	Link lk = linksBuffer[ inputLine[0].vertexID ];
 	PARTICLE3D end1 = particleReadBuffer[ lk.par1 ];
 	PARTICLE3D end2 = particleReadBuffer[ lk.par2 ];
 	PARTICLE3D referencePrt = particleReadBuffer[ Params.SelectedParticle ];
+	// Draw with reference to a selected particle:
+			#ifdef RELATIVE_POS
+				float4 pos1 = float4( end1.Position.xyz - referencePrt.Position.xyz, 1 );
+				float4 pos2 = float4( end2.Position.xyz - referencePrt.Position.xyz, 1 );
+			#endif // RELATIVE_POS
 
-// Draw with reference to a selected particle:
-#ifdef RELATIVE_POS
-	float4 pos1 = float4( end1.Position.xyz - referencePrt.Position.xyz, 1 );
-	float4 pos2 = float4( end2.Position.xyz - referencePrt.Position.xyz, 1 );
-#endif // RELATIVE_POS
+			// Draw without a reference:
+			#ifdef ABSOLUTE_POS
+				float4 pos1 = float4( end1.Position.xyz, 1 );
+				float4 pos2 = float4( end2.Position.xyz, 1 );
+			#endif // ABSOLUTE_POS
 
-// Draw without a reference:
-#ifdef ABSOLUTE_POS
-	float4 pos1 = float4( end1.Position.xyz, 1 );
-	float4 pos2 = float4( end2.Position.xyz, 1 );
-#endif // ABSOLUTE_POS
+	if (Params.edgeOpacity > 1.0f){
+	
+			GSOutput p1, p2, p3, p4, p5, p6, p7, p8;
+			
+			float weight		=	Params.edgeOpacity / 2;
+			float4 R		=	(pos1 - pos2);
+			float l = length(R);
+			float4 offset1 = mul(normalize(R) , Params.View);
+			float4 offset2 = mul(normalize(R) , Params.View);
+
+			/*if( end1.Color0.b != 1 ){
+				offset1 = offset1 * 5.0f;
+			}
+
+			if( end2.Color0.b != 1 ){
+				offset2 = offset2 * 4.0f;
+			}*/
+			
+			float Rxy2 = R.x*R.x + R.y*R.y;
+			float Rxz2 = R.x*R.x + R.z*R.z;
+
+			float4 Ort1 = mul( float4
+				(
+					sqrt( R.y*R.y/Rxy2 ),
+					sqrt( R.x*R.x/Rxy2 ),
+					0,
+					0
+				), weight  );
+
+			float alpha = Ort1.x * R.z / (Ort1.y * R.x);
+			float beta = 1 + alpha*alpha;
+
+			float4 Ort2 = float4(0, 0, 0, 0);
+			Ort2.z = - sqrt( Ort1.x*Ort1.x / ( alpha*alpha*Ort1.y*Ort1.y + beta*Ort1.x*Ort1.x ) );
+			Ort2.x = - sqrt( 1-beta*Ort2.z*Ort2.z );
+			Ort2.y = alpha*Ort2.z;
+
+			Ort2 = mul( Ort2, weight );
+
+			pos1 = mul(pos1 , Params.View);
+			pos2 = mul(pos2 , Params.View);
+
+			p1.Position = pos1 + Ort1 + Ort2;
+			p2.Position = pos1 + Ort1 - Ort2;
+			p3.Position = pos1 - Ort1 - Ort2;
+			p4.Position = pos1 - Ort1 + Ort2;
+		
+			p5.Position = pos2 + Ort1 + Ort2;
+			p6.Position = pos2 + Ort1 - Ort2;
+			p7.Position = pos2 - Ort1 - Ort2;
+			p8.Position = pos2 - Ort1 + Ort2;
+
+			p1.Position = mul( p1.Position - offset1 * end1.Size0 * Params.nodeScale * 1.1f , Params.Projection );
+			p2.Position = mul( p2.Position - offset1 * end1.Size0 * Params.nodeScale * 1.1f , Params.Projection );
+			p3.Position = mul( p3.Position - offset1 * end1.Size0 * Params.nodeScale * 1.1f , Params.Projection );
+			p4.Position = mul( p4.Position - offset1 * end1.Size0 * Params.nodeScale * 1.1f , Params.Projection );
+																					   
+			p5.Position = mul( p5.Position + offset2 * end2.Size0 * Params.nodeScale * 1.1f ,  Params.Projection );
+			p6.Position = mul( p6.Position + offset2 * end2.Size0 * Params.nodeScale * 1.1f ,  Params.Projection );
+			p7.Position = mul( p7.Position + offset2 * end2.Size0 * Params.nodeScale * 1.1f ,  Params.Projection );
+			p8.Position = mul( p8.Position + offset2 * end2.Size0 * Params.nodeScale * 1.1f ,  Params.Projection );
 
 
-	float4 posV1	=	mul( pos1, Params.View );
-	float4 posV2	=	mul( pos2, Params.View );
+			p1.TexCoord		=	float2(0, 1);
+			p2.TexCoord		=	float2(0, 0);
+			p3.TexCoord		=	float2(0, 1);
+			p4.TexCoord		=	float2(0, 0);
+
+			p5.TexCoord		=	float2(1, 1);
+			p6.TexCoord		=	float2(1, 0);
+			p7.TexCoord		=	float2(1, 1);
+			p8.TexCoord		=	float2(1, 0);
+						
+			p1.Color		=	lk.color;
+			p2.Color		=	lk.color;
+			p3.Color		=	lk.color;
+			p4.Color		=	lk.color;
+								   
+			p5.Color		=	lk.color;
+			p6.Color		=	lk.color;
+			p7.Color		=	lk.color;
+			p8.Color		=	lk.color;
+
+			outputStream.Append(p1);
+			outputStream.Append(p2);
+			outputStream.Append(p3);
+			outputStream.RestartStrip(); 
+
+			outputStream.Append(p1);
+			outputStream.Append(p3);
+			outputStream.Append(p4);
+			outputStream.RestartStrip();
+
+			outputStream.Append(p2);
+			outputStream.Append(p7);
+			outputStream.Append(p3);
+			outputStream.RestartStrip(); 
+
+			outputStream.Append(p2);
+			outputStream.Append(p6);
+			outputStream.Append(p7);
+			outputStream.RestartStrip();
+
+			outputStream.Append(p3);
+			outputStream.Append(p7);
+			outputStream.Append(p8);
+			outputStream.RestartStrip(); 
+
+			outputStream.Append(p3);
+			outputStream.Append(p8);
+			outputStream.Append(p4);
+			outputStream.RestartStrip(); 
+
+			outputStream.Append(p1);
+			outputStream.Append(p4);
+			outputStream.Append(p5);
+			outputStream.RestartStrip(); 
+
+			outputStream.Append(p4);
+			outputStream.Append(p8);
+			outputStream.Append(p5);
+			outputStream.RestartStrip(); 
+
+			outputStream.Append(p1);
+			outputStream.Append(p6);
+			outputStream.Append(p2);
+			outputStream.RestartStrip();
+
+			outputStream.Append(p1);
+			outputStream.Append(p5);
+			outputStream.Append(p6);
+			outputStream.RestartStrip(); 
+
+			outputStream.Append(p5);
+			outputStream.Append(p7);
+			outputStream.Append(p6);
+			outputStream.RestartStrip(); 
+
+			outputStream.Append(p5);
+			outputStream.Append(p8);
+			outputStream.Append(p7);
+			outputStream.RestartStrip(); 
+	}
+	else {
+	
+		GSOutput p1, p2;
+
+		float4 posV1	=	mul( pos1, Params.View );
+		float4 posV2	=	mul( pos2, Params.View );
 
 
-	p1.Position		=	mul( posV1, Params.Projection );
-	p2.Position		=	mul( posV2, Params.Projection );
+		p1.Position		=	mul( posV1, Params.Projection );
+		p2.Position		=	mul( posV2, Params.Projection );
 
-	p1.TexCoord		=	float2(0, 0);
-	p2.TexCoord		=	float2(0, 0);
+		p1.TexCoord		=	float2(0, 0);
+		p2.TexCoord		=	float2(0, 0);
 
-	float opac		=	Params.edgeOpacity;
+		float opac		=	Params.edgeOpacity;
 
-// if line is highlighted, draw at full opacity:
-#ifdef HIGH_LINE
-	opac			=	1.0f;
-#endif
+	// if line is highlighted, draw at full opacity:
+	#ifdef HIGH_LINE
+		opac			=	1.0f;
+	#endif
 
-	float4 color	=	mul(lk.color, opac);
+		float4 color	=	mul(lk.color, opac);
 
-	p1.Color		=	color;
-	p2.Color		=	color;
+		p1.Color		=	color;
+		p2.Color		=	color;
 
-	outputStream.Append(p1);
-	outputStream.Append(p2);
-	outputStream.RestartStrip(); 
-
+		outputStream.Append(p1);
+		outputStream.Append(p2);
+		outputStream.RestartStrip(); 
+	}
 
 }
 
@@ -393,6 +536,7 @@ float4 PSMain( GSOutput input ) : SV_Target
 #if defined (POINT) || defined (SPARKS) || defined(SELECTION)
 float4 PSMain( GSOutput input ) : SV_Target
 {
+	clip( Texture.Sample( Sampler, input.TexCoord ).a < 0.5f ? -1:1 );
 	return Texture.Sample( Sampler, input.TexCoord ) * float4(input.Color.rgb,1);
 }
 #endif // POINT or SPARK or SELECTION

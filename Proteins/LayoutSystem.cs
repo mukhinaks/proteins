@@ -236,7 +236,7 @@ namespace GraphVis
 			factory = new StateFactory(shader, typeof(ComputeFlags), (plState, comb) =>
 			{
 				plState.RasterizerState = RasterizerState.CullNone;
-				plState.BlendState = BlendState.NegMultiply;
+				plState.BlendState = BlendState.AlphaBlend; //BlendState.NegMultiply;
 				plState.DepthStencilState = DepthStencilState.Readonly;
 				plState.Primitive = Primitive.PointList;
 			});

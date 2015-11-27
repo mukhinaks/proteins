@@ -280,7 +280,7 @@ void CSMain(
 //		p.Position.xyz += mul( p.Velocity, Params.DeltaTime );
 //		p.Velocity += mul( p.Force, Params.DeltaTime );
 
-		p.Position.xyz += mul( p.Force, Params.DeltaTime );
+		p.Position.xyz += mul( p.Force, pow(Params.DeltaTime, 2.0f) );
 		particleRWBuffer[ id ] = p;
 	}
 }

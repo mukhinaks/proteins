@@ -31,7 +31,7 @@
     <CSEntryPoint>CSMain</CSEntryPoint>
     <SourceFile>debugRender.hlsl</SourceFile>
     <ShowPemutations>false</ShowPemutations>
-    <ListingPath>D:\proteins\Proteins\Proteins\Content\Temp\0EC7C2D14F65EFBA65B361728EE70CD3.html</ListingPath>
+    <ListingPath>D:\proteins\Proteins\Content\Temp\0EC7C2D14F65EFBA65B361728EE70CD3.html</ListingPath>
   </Asset>
   <Asset xsi:type="UbershaderAsset">
     <AssetPath>spriteBatch.hlsl</AssetPath>
@@ -51,7 +51,7 @@
     <CSEntryPoint>CSMain</CSEntryPoint>
     <SourceFile>spriteBatch.hlsl</SourceFile>
     <ShowPemutations>false</ShowPemutations>
-    <ListingPath>D:\proteins\Proteins\Proteins\Content\Temp\A41575F61A6644F1898EE4AE0783DAF8.html</ListingPath>
+    <ListingPath>D:\proteins\Proteins\Content\Temp\A41575F61A6644F1898EE4AE0783DAF8.html</ListingPath>
   </Asset>
   <Asset xsi:type="UbershaderAsset">
     <AssetPath>stereo.hlsl</AssetPath>
@@ -71,7 +71,7 @@
     <CSEntryPoint>CSMain</CSEntryPoint>
     <SourceFile>stereo.hlsl</SourceFile>
     <ShowPemutations>true</ShowPemutations>
-    <ListingPath>D:\proteins\Proteins\Proteins\Content\Temp\4B9F5097212F68238CEF9BFF980979F4.html</ListingPath>
+    <ListingPath>D:\proteins\Proteins\Content\Temp\4B9F5097212F68238CEF9BFF980979F4.html</ListingPath>
   </Asset>
   <Asset xsi:type="UbershaderAsset">
     <AssetPath>Compute.hlsl</AssetPath>
@@ -91,7 +91,7 @@
     <CSEntryPoint>CSMain</CSEntryPoint>
     <SourceFile>Compute.hlsl</SourceFile>
     <ShowPemutations>false</ShowPemutations>
-    <ListingPath>D:\proteins\Proteins\Proteins\Content\Temp\1899D2215792452F122591D2CF41D839.html</ListingPath>
+    <ListingPath>D:\proteins\Proteins\Content\Temp\1899D2215792452F122591D2CF41D839.html</ListingPath>
   </Asset>
   <Asset xsi:type="UbershaderAsset">
     <AssetPath>Render.hlsl</AssetPath>
@@ -111,7 +111,7 @@
     <CSEntryPoint>CSMain</CSEntryPoint>
     <SourceFile>Render.hlsl</SourceFile>
     <ShowPemutations>false</ShowPemutations>
-    <ListingPath>D:\proteins\Proteins\Proteins\Content\Temp\D2FF2A025CD3CFBBE98E238647ED8262.html</ListingPath>
+    <ListingPath>D:\proteins\Proteins\Content\Temp\D2FF2A025CD3CFBBE98E238647ED8262.html</ListingPath>
   </Asset>
   <Asset xsi:type="ImageFileTextureAsset">
     <AssetPath>selection.tga</AssetPath>
@@ -188,5 +188,37 @@
       <B>0</B>
       <A>255</A>
     </FillColor>
+  </Asset>
+  <Asset xsi:type="ImageFileTextureAsset">
+    <AssetPath>labelBigLightFont.bmfc\Page#0</AssetPath>
+    <BuildOrder>1</BuildOrder>
+    <IgnoreToolChanges>false</IgnoreToolChanges>
+    <NoMips>false</NoMips>
+    <Fast>false</Fast>
+    <ToNormal>false</ToNormal>
+    <Color>true</Color>
+    <Alpha>false</Alpha>
+    <Normal>false</Normal>
+    <Compression>RGB</Compression>
+    <SourceFile>Temp\0AA334262955F7A56C3B1289B0E7B8ED_0.tga</SourceFile>
+  </Asset>
+  <Asset xsi:type="BMFontSpriteFontAsset">
+    <AssetPath>alsNormal.bmfc</AssetPath>
+    <BuildOrder>0</BuildOrder>
+    <IgnoreToolChanges>false</IgnoreToolChanges>
+    <SourcePath>alsNormal.bmfc</SourcePath>
+  </Asset>
+  <Asset xsi:type="ImageFileTextureAsset">
+    <AssetPath>alsNormal.bmfc\Page#0</AssetPath>
+    <BuildOrder>1</BuildOrder>
+    <IgnoreToolChanges>false</IgnoreToolChanges>
+    <NoMips>false</NoMips>
+    <Fast>false</Fast>
+    <ToNormal>false</ToNormal>
+    <Color>true</Color>
+    <Alpha>false</Alpha>
+    <Normal>false</Normal>
+    <Compression>RGB</Compression>
+    <SourceFile>Temp\6580D2FEF242D523EA0B7A3C84C84C78_0.tga</SourceFile>
   </Asset>
 </ArrayOfAsset>
