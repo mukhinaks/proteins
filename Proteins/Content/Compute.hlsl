@@ -253,7 +253,7 @@ void CSMain(
 
 		float factor = 0.3f;
 
-		force.xyz += mul(R, factor*diff/Rabs);
+		force.xyz += mul(R, factor * diff/Rabs);
 		prt.Force += force.xyz;
 		prt.Energy += force.w;
 		particleRWBuffer[id] = prt;

@@ -57,8 +57,8 @@ namespace Proteins
 				Color.White;
 
 			inputs = new List<int>();
-			coupleStrength = 5.0f;
-			decoupleStrength = 0.5f;
+			coupleStrength = 3.5f;
+			decoupleStrength = 1.5f;
 		}
 
 

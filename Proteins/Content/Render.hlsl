@@ -305,22 +305,15 @@ void GSMain( point VSOutput inputLine[1], inout TriangleStream<GSOutput> outputS
 			float l = length(R);
 			float4 offset1 = mul(normalize(R) , Params.View);
 			float4 offset2 = mul(normalize(R) , Params.View);
-
-			/*if( end1.Color0.b != 1 ){
-				offset1 = offset1 * 5.0f;
-			}
-
-			if( end2.Color0.b != 1 ){
-				offset2 = offset2 * 4.0f;
-			}*/
+						
 			
 			float Rxy2 = R.x*R.x + R.y*R.y;
 			float Rxz2 = R.x*R.x + R.z*R.z;
 
 			float4 Ort1 = mul( float4
 				(
-					sqrt( R.y*R.y/Rxy2 ),
-					sqrt( R.x*R.x/Rxy2 ),
+					sqrt( R.y*R.y / Rxy2 ),
+					sqrt( R.x*R.x / Rxy2 ),
 					0,
 					0
 				), weight  );
@@ -329,9 +322,9 @@ void GSMain( point VSOutput inputLine[1], inout TriangleStream<GSOutput> outputS
 			float beta = 1 + alpha*alpha;
 
 			float4 Ort2 = float4(0, 0, 0, 0);
-			Ort2.z = - sqrt( Ort1.x*Ort1.x / ( alpha*alpha*Ort1.y*Ort1.y + beta*Ort1.x*Ort1.x ) );
-			Ort2.x = - sqrt( 1-beta*Ort2.z*Ort2.z );
-			Ort2.y = alpha*Ort2.z;
+			Ort2.z = - sqrt( Ort1.x * Ort1.x / ( alpha * alpha * Ort1.y * Ort1.y + beta * Ort1.x * Ort1.x ) );
+			Ort2.x = - sqrt( 1 - beta * Ort2.z * Ort2.z );
+			Ort2.y = alpha * Ort2.z;
 
 			Ort2 = mul( Ort2, weight );
 
@@ -348,15 +341,15 @@ void GSMain( point VSOutput inputLine[1], inout TriangleStream<GSOutput> outputS
 			p7.Position = pos2 - Ort1 - Ort2;
 			p8.Position = pos2 - Ort1 + Ort2;
 
-			p1.Position = mul( p1.Position - offset1 * end1.Size0 * Params.nodeScale * 1.1f , Params.Projection );
-			p2.Position = mul( p2.Position - offset1 * end1.Size0 * Params.nodeScale * 1.1f , Params.Projection );
-			p3.Position = mul( p3.Position - offset1 * end1.Size0 * Params.nodeScale * 1.1f , Params.Projection );
-			p4.Position = mul( p4.Position - offset1 * end1.Size0 * Params.nodeScale * 1.1f , Params.Projection );
-																					   
-			p5.Position = mul( p5.Position + offset2 * end2.Size0 * Params.nodeScale * 1.1f ,  Params.Projection );
-			p6.Position = mul( p6.Position + offset2 * end2.Size0 * Params.nodeScale * 1.1f ,  Params.Projection );
-			p7.Position = mul( p7.Position + offset2 * end2.Size0 * Params.nodeScale * 1.1f ,  Params.Projection );
-			p8.Position = mul( p8.Position + offset2 * end2.Size0 * Params.nodeScale * 1.1f ,  Params.Projection );
+			p1.Position = mul( p1.Position - offset1 * end1.Size0 * Params.nodeScale * 1.5f , Params.Projection );
+			p2.Position = mul( p2.Position - offset1 * end1.Size0 * Params.nodeScale * 1.5f , Params.Projection );
+			p3.Position = mul( p3.Position - offset1 * end1.Size0 * Params.nodeScale * 1.5f , Params.Projection );
+			p4.Position = mul( p4.Position - offset1 * end1.Size0 * Params.nodeScale * 1.5f , Params.Projection );
+																					   	 
+			p5.Position = mul( p5.Position + offset2 * end2.Size0 * Params.nodeScale * 1.5f ,  Params.Projection );
+			p6.Position = mul( p6.Position + offset2 * end2.Size0 * Params.nodeScale * 1.5f ,  Params.Projection );
+			p7.Position = mul( p7.Position + offset2 * end2.Size0 * Params.nodeScale * 1.5f ,  Params.Projection );
+			p8.Position = mul( p8.Position + offset2 * end2.Size0 * Params.nodeScale * 1.5f ,  Params.Projection );
 
 
 			p1.TexCoord		=	float2(0, 1);
@@ -379,7 +372,7 @@ void GSMain( point VSOutput inputLine[1], inout TriangleStream<GSOutput> outputS
 			p7.Color		=	lk.color;
 			p8.Color		=	lk.color;
 
-			outputStream.Append(p1);
+			/*outputStream.Append(p1);
 			outputStream.Append(p2);
 			outputStream.Append(p3);
 			outputStream.RestartStrip(); 
@@ -387,7 +380,7 @@ void GSMain( point VSOutput inputLine[1], inout TriangleStream<GSOutput> outputS
 			outputStream.Append(p1);
 			outputStream.Append(p3);
 			outputStream.Append(p4);
-			outputStream.RestartStrip();
+			outputStream.RestartStrip();*/
 
 			outputStream.Append(p2);
 			outputStream.Append(p7);
@@ -429,7 +422,7 @@ void GSMain( point VSOutput inputLine[1], inout TriangleStream<GSOutput> outputS
 			outputStream.Append(p6);
 			outputStream.RestartStrip(); 
 
-			outputStream.Append(p5);
+			/*outputStream.Append(p5);
 			outputStream.Append(p7);
 			outputStream.Append(p6);
 			outputStream.RestartStrip(); 
@@ -437,7 +430,7 @@ void GSMain( point VSOutput inputLine[1], inout TriangleStream<GSOutput> outputS
 			outputStream.Append(p5);
 			outputStream.Append(p8);
 			outputStream.Append(p7);
-			outputStream.RestartStrip(); 
+			outputStream.RestartStrip(); */
 	}
 	else {
 	
@@ -527,7 +520,7 @@ void GSMain( point VSOutput inputLine[1], inout TriangleStream<GSOutput> outputS
 #ifdef LINE
 float4 PSMain( GSOutput input ) : SV_Target
 {
-	return float4(input.Color.rgb,1);
+	return float4(input.Color.rgb, 0.2f);
 }
 #endif // LINE
 
