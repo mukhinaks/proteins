@@ -94,7 +94,7 @@ namespace Proteins
 			delay = 500;
 			delay2 = 3000;
 
-
+			//COLORS FOR HIGHLIGHT / цвета для активных
 			nodeHighlightColorNeg = new Color(221,0,41) ;// Color.Red;
 			nodeHighlightColorPos = new Color(0,221,180) ; //Color.Green;
 
@@ -119,8 +119,9 @@ namespace Proteins
 			var UI = GetService<UserInterface>();
 			UI.RootFrame = new Frame(this, 0, 0, 800, 600, "", Color.Zero);
 
+			//Buttons coords / кнопки
 			int x = 10;
-			int y = 100;
+			int y = 10; // отступ сверху offset 
 			int btnWidth = 60;
 			int btnHeight = 40;
 			int padding = 5;
@@ -384,6 +385,9 @@ namespace Proteins
 						Console.WriteLine(oe.Item1.GetInfo());
 					}
 					Console.WriteLine();
+					 
+            
+					s = "Name: " + protein.Name;
 				}
 			}
 			if (e.Key == Keys.R)
@@ -458,11 +462,11 @@ namespace Proteins
 				timer = 0;
 			}
 
-			ds.Add(Color.Orange, "FPS {0}", gameTime.Fps);
-			ds.Add("F1   - show developer console");
-			ds.Add("F5   - build content and reload textures");
-			ds.Add("F12  - make screenshot");
-			ds.Add("ESC  - exit");
+			//ds.Add(Color.Orange, "FPS {0}", gameTime.Fps);
+			//ds.Add("F1   - show developer console");
+			//ds.Add("F5   - build content and reload textures");
+			//ds.Add("F12  - make screenshot");
+			//ds.Add("ESC  - exit");
 
 			base.Update(gameTime);
 
@@ -470,7 +474,7 @@ namespace Proteins
 		}
 
 
-
+		string s = "";
 		/// <summary>
 		/// Draws game
 		/// </summary>
@@ -482,6 +486,9 @@ namespace Proteins
 
 			//	Draw stuff here :
 			GetService<UserInterface>().Draw(gameTime, stereoEye);
+			var sb = GetService<SpriteBatch>();
+			font.DrawString(sb, s,  GraphicsDevice.DisplayBounds.Width - font.MeasureString(s).Width - 10, GraphicsDevice.DisplayBounds.Height - font.CapHeight, Color.White);	
+
 		}
 
 

@@ -111,7 +111,7 @@
     <CSEntryPoint>CSMain</CSEntryPoint>
     <SourceFile>Render.hlsl</SourceFile>
     <ShowPemutations>false</ShowPemutations>
-    <ListingPath>C:\GitHub\proteins\Proteins\Content\Temp\D2FF2A025CD3CFBBE98E238647ED8262.html</ListingPath>
+    <ListingPath>D:\proteins\Proteins\Content\Temp\D2FF2A025CD3CFBBE98E238647ED8262.html</ListingPath>
   </Asset>
   <Asset xsi:type="ImageFileTextureAsset">
     <AssetPath>selection.tga</AssetPath>

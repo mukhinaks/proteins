@@ -114,11 +114,11 @@ namespace GraphVis
 
 			var debStr = HostSystem.Environment.GetService<DebugStrings>();
 
-			debStr.Add(Color.Black, "WOLFRAM MODE");
-			debStr.Add(Color.Aqua, "Step factor  = " + stepLength);
-			debStr.Add(Color.Aqua, "Energy       = " + energy);
-			debStr.Add(Color.Aqua, "deltaEnergy  = " + deltaEnergy);
-			debStr.Add(Color.Aqua, "Iteration      = " + numIterations);
+			//debStr.Add(Color.Black, "WOLFRAM MODE");
+			//debStr.Add(Color.Aqua, "Step factor  = " + stepLength);
+			//debStr.Add(Color.Aqua, "Energy       = " + energy);
+			//debStr.Add(Color.Aqua, "deltaEnergy  = " + deltaEnergy);
+			//debStr.Add(Color.Aqua, "Iteration      = " + numIterations);
 		}
 		
 

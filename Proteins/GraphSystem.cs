@@ -327,10 +327,10 @@ namespace GraphVis {
 				//	plState.BlendState = BlendState.Screen;
 				//	plState.DepthStencilState = DepthStencilState.Readonly;
 				//}
-				if (flag.HasFlag(RenderFlags.POINT))
+				if (flag.HasFlag(RenderFlags.LINE))
 				{
 					//plState.BlendState = BlendState.Screen;
-					//plState.DepthStencilState = DepthStencilState.Default;
+					plState.DepthStencilState = DepthStencilState.Readonly;
 				}
 			}
 
@@ -845,7 +845,7 @@ namespace GraphVis {
 			// draw highlighted points: ---------------------------------------------------------------
 			device.PipelineState = factory[(int)RenderFlags.DRAW | (int)RenderFlags.SELECTION|anchorFlag];
 			device.PixelShaderResources		[0] = highlightTex;
-			device.SetTargets( device.BackbufferDepth, device.BackbufferColor );
+			//device.SetTargets( device.BackbufferDepth, device.BackbufferColor );
 
 			foreach (var high in highlightNodesList)
 			{

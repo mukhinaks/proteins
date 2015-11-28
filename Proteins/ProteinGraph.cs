@@ -57,7 +57,8 @@ namespace Proteins
 				Color.White;
 
 			inputs = new List<int>();
-			coupleStrength = 3.5f;
+			// INTERACTION FORCES COEFFCIENTS / силы коэффициенты недорого =)
+			coupleStrength = 10.5f;
 			decoupleStrength = 1.5f;
 		}
 
@@ -94,9 +95,9 @@ namespace Proteins
 				}
 				string edgeType = parts[3];
 
-				int cat1 = int.Parse(parts[4]) * 100;
-				int cat2 = int.Parse(parts[5]) * 100;
-				int cat3 = int.Parse(parts[6]) * 100;
+				int cat1 = int.Parse(parts[4]) ;
+				int cat2 = int.Parse(parts[5]) ;
+				int cat3 = int.Parse(parts[6]) ;
 
 				if (!uniqueIds.ContainsKey(id))
 				{
@@ -104,8 +105,23 @@ namespace Proteins
 					idByName.Add(name, numNodes);
 					++numNodes;
 
-					Color color = new Color( cat1  + 200, cat2 + 200, cat3 + 200);
-					//Color color = Color.White;
+					//COLORS FOR PARTICLES / цвета для частиц
+					Color color = Color.White;
+
+					Color color1 = new Color (111,196,235); //blue
+					Color color2 = new Color (235,111,196); //pink
+					Color color3 = new Color (196,235,111); //yellow-green
+
+					if(cat1 == 1) color =  color1;
+					if(cat2 == 1) color =  color2;
+					if(cat3 == 1) color =  color3;
+
+					//среднее арифметическое 
+					if(cat1 == 1 && cat2 == 1) color = new Color ( (color1.ToVector3() + color2.ToVector3() ) / 2) ; 
+					if(cat1 == 1 && cat3 == 1) color = new Color ( (color1.ToVector3() + color3.ToVector3() ) / 2) ; 
+					if(cat2 == 1 && cat3 == 1) color = new Color ( (color3.ToVector3() + color2.ToVector3() ) / 2) ;
+					if(cat1 == 1 && cat2 == 1 && cat3 == 1) color = new Color ( (color3.ToVector3() + color2.ToVector3() + color1.ToVector3() ) / 3) ;
+
 					AddNode(new ProteinNode(name, 1.0f, color));
 					 
 				}
