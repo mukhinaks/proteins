@@ -122,8 +122,8 @@ namespace Proteins
 			//Buttons coords / кнопки
 			int x = 10;
 			int y = 10; // отступ сверху offset 
-			int btnWidth = 60;
-			int btnHeight = 40;
+			int btnWidth = 200;
+			int btnHeight = 30;
 			int padding = 5;
 			button1 = new Frame(this,x,y,btnWidth,btnHeight,"1",Color.Zero)
 			{
@@ -133,14 +133,14 @@ namespace Proteins
 				TextAlignment = Alignment.MiddleCenter,
 			
 			};
-			button2 = new Frame(this,x, y + (btnHeight + padding), btnWidth, btnHeight, "2", Color.Zero)
+			button2 = new Frame(this,x, y + (btnHeight + padding), btnWidth, btnHeight, "блокировка YAP", Color.Zero)
 			{
 				Font = font,
 				Border = 1,
 				BorderColor = Color.White,//Color.Red,
 				TextAlignment = Alignment.MiddleCenter
 			};
-			button3 = new Frame(this, x, y + 2*(btnHeight + padding), btnWidth, btnHeight, "3", Color.Zero)
+			button3 = new Frame(this, x, y + 2*(btnHeight + padding), btnWidth, btnHeight, "блокировка LAT1/2", Color.Zero)
 			{
 				Font = font,
 				Border = 1,
@@ -154,7 +154,7 @@ namespace Proteins
 				BorderColor = Color.White,//Color.Red,
 				TextAlignment = Alignment.MiddleCenter
 			};
-			button5 = new Frame(this, x, y + 4*(btnHeight + padding), btnWidth, btnHeight, "5", Color.Zero)
+			button5 = new Frame(this, x, y + 4*(btnHeight + padding), btnWidth, btnHeight, "блокировка GSK3b", Color.Zero)
 			{
 				Font = font,
 				Border = 1,
@@ -168,19 +168,19 @@ namespace Proteins
 				BorderColor = Color.White,//Color.Red,
 				TextAlignment = Alignment.MiddleCenter
 			};
-			resetBtn = new Frame(this, x, y + 6 * (btnHeight + padding), btnWidth, btnHeight, "R", Color.Zero)
+			resetBtn = new Frame(this, x, y + 6 * (btnHeight + padding), btnWidth, btnHeight, "исходное состояние", Color.Zero)
 			{
 				Font = font,
 				Border = 1,
 				BorderColor = Color.White,//Color.Red,
 				TextAlignment = Alignment.MiddleCenter
 			};
-			UI.RootFrame.Add(button1);
+			//UI.RootFrame.Add(button1);
 			UI.RootFrame.Add(button2);
 			UI.RootFrame.Add(button3);
-			UI.RootFrame.Add(button4);
+			//UI.RootFrame.Add(button4);
 			UI.RootFrame.Add(button5);
-			UI.RootFrame.Add(button6);
+			//UI.RootFrame.Add(button6);
 			UI.RootFrame.Add(resetBtn);
 
 			button1.Click += (s, e) => action1();
