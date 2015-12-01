@@ -110,7 +110,7 @@ namespace Proteins
 
 					Color color1 = new Color (111,196,235); //blue
 					Color color2 = new Color (235,111,196); //pink
-					Color color3 = new Color (236,219,30); //yellow-green
+					Color color3 = new Color (236,219,30); //yellow
 
 					if(cat1 == 1) color =  color1;
 					if(cat2 == 1) color =  color2;

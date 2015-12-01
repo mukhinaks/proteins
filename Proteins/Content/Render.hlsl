@@ -335,10 +335,10 @@ void GSMain( point VSOutput inputLine[1], inout TriangleStream<GSOutput> outputS
 
 
 			
-			p1.Position = mul( pos1 + float4(side*weight, 0)  , Params.Projection ) ;	
-			p2.Position = mul( pos1 - float4(side*weight, 0)  , Params.Projection ) ;	
-			p3.Position = mul( pos2 + float4(side*weight, 0)  , Params.Projection ) ;	
-			p4.Position = mul( pos2 - float4(side*weight, 0)  , Params.Projection ) ;	
+			p1.Position = mul( pos1 + float4(side*weight, 0)  + float4(dir * end1.Size0 *  Params.nodeScale * 1.5f , 0), Params.Projection ) ;	
+			p2.Position = mul( pos1 - float4(side*weight, 0)  + float4(dir * end1.Size0 *  Params.nodeScale * 1.5f , 0), Params.Projection ) ;	
+			p3.Position = mul( pos2 + float4(side*weight, 0)  - float4(dir * end2.Size0 *  Params.nodeScale * 1.5f , 0), Params.Projection ) ;	
+			p4.Position = mul( pos2 - float4(side*weight, 0)  - float4(dir * end2.Size0 *  Params.nodeScale * 1.5f , 0), Params.Projection ) ;	
 
 			outputStream.Append(p1);
 			outputStream.Append(p2);

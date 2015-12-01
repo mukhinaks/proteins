@@ -330,7 +330,7 @@ namespace GraphVis {
 				if (flag.HasFlag(RenderFlags.LINE))
 				{
 					//plState.BlendState = BlendState.Screen;
-					plState.DepthStencilState = DepthStencilState.Readonly;
+					//plState.DepthStencilState = DepthStencilState.Readonly;
 				}
 			}
 
