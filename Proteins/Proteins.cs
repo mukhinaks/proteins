@@ -35,12 +35,6 @@ namespace Proteins
 		Color nodeHighlightColorNeg;
 		SpriteFont font;
 
-		Frame button1;
-		Frame button2;
-		Frame button3;
-		Frame button4;
-		Frame button5;
-		Frame button6;
 		Frame resetBtn;
 
 		Random rnd = new Random();
@@ -125,102 +119,29 @@ namespace Proteins
 			int btnWidth = 200;
 			int btnHeight = 30;
 			int padding = 5;
-			button1 = new Frame(this,x,y,btnWidth,btnHeight,"1",Color.Zero)
-			{
-				Font = font,
-				Border = 1,
-				BorderColor = Color.White,//Color.Red,
-				TextAlignment = Alignment.MiddleCenter,
+			int i = 0;
+			AddLeftButton(UI.RootFrame, this, x, y + i++ * (btnHeight + padding), btnWidth, btnHeight, "блокировка YAP", Color.Zero, new List<string>{"PKCa"});
 			
-			};
-			button2 = new Frame(this,x, y + (btnHeight + padding), btnWidth, btnHeight, "блокировка YAP", Color.Zero)
+			AddLeftButton(UI.RootFrame, this, x, y + i++ * (btnHeight + padding), btnWidth, btnHeight, "блокировка LAT1/2", Color.Zero, new List<string>{"Ecad"});
+						
+			AddLeftButton(UI.RootFrame, this, x, y +  i++ * (btnHeight + padding), btnWidth, btnHeight, "блокировка GSK3b", Color.Zero, new List<string>{"FZD"});
+			
+			resetBtn = new Frame(this, x, y + i++ * (btnHeight + padding), btnWidth, btnHeight, "исходное состояние", Color.Zero)
 			{
 				Font = font,
 				Border = 1,
 				BorderColor = Color.White,//Color.Red,
 				TextAlignment = Alignment.MiddleCenter
 			};
-			button3 = new Frame(this, x, y + 2*(btnHeight + padding), btnWidth, btnHeight, "блокировка LAT1/2", Color.Zero)
-			{
-				Font = font,
-				Border = 1,
-				BorderColor = Color.White,//Color.Red,
-				TextAlignment = Alignment.MiddleCenter
-			};
-			button4 = new Frame(this, x, y + 3*(btnHeight + padding), btnWidth, btnHeight, "4", Color.Zero)
-			{
-				Font = font,
-				Border = 1,
-				BorderColor = Color.White,//Color.Red,
-				TextAlignment = Alignment.MiddleCenter
-			};
-			button5 = new Frame(this, x, y + 4*(btnHeight + padding), btnWidth, btnHeight, "блокировка GSK3b", Color.Zero)
-			{
-				Font = font,
-				Border = 1,
-				BorderColor = Color.White,//Color.Red,
-				TextAlignment = Alignment.MiddleCenter
-			};
-			button6 = new Frame(this, x, y + 5*(btnHeight + padding), btnWidth, btnHeight, "6", Color.Zero)
-			{
-				Font = font,
-				Border = 1,
-				BorderColor = Color.White,//Color.Red,
-				TextAlignment = Alignment.MiddleCenter
-			};
-			resetBtn = new Frame(this, x, y + 6 * (btnHeight + padding), btnWidth, btnHeight, "исходное состояние", Color.Zero)
-			{
-				Font = font,
-				Border = 1,
-				BorderColor = Color.White,//Color.Red,
-				TextAlignment = Alignment.MiddleCenter
-			};
-			//UI.RootFrame.Add(button1);
-			UI.RootFrame.Add(button2);
-			UI.RootFrame.Add(button3);
-			//UI.RootFrame.Add(button4);
-			UI.RootFrame.Add(button5);
-			//UI.RootFrame.Add(button6);
+			
 			UI.RootFrame.Add(resetBtn);
 
-			button1.Click += (s, e) => action1();
-			button2.Click += (s, e) => action2();
-			button3.Click += (s, e) => action3();
-			button4.Click += (s, e) => action4();
-			button5.Click += (s, e) => action5();
-			button6.Click += (s, e) => action6();
+
+
 			resetBtn.Click += (s, e) => ResetGraph();
 
-			button1.StatusChanged += (s, e) =>
-            {
-                if (e.Status == FrameStatus.None)       { button1.BackColor = Color.Zero; }
-                if (e.Status == FrameStatus.Hovered)    { button1.BackColor = new Color (20, 20, 20); }
-            };
-			button2.StatusChanged += (s, e) =>
-            {
-                if (e.Status == FrameStatus.None)       { button2.BackColor = Color.Zero; }
-                if (e.Status == FrameStatus.Hovered)    { button2.BackColor = new Color (20, 20, 20); }
-            };
-			button3.StatusChanged += (s, e) =>
-            {
-                if (e.Status == FrameStatus.None)       { button3.BackColor = Color.Zero; }
-                if (e.Status == FrameStatus.Hovered)    { button3.BackColor = new Color (20, 20, 20); }
-            };
-			button4.StatusChanged += (s, e) =>
-            {
-                if (e.Status == FrameStatus.None)       { button4.BackColor = Color.Zero; }
-                if (e.Status == FrameStatus.Hovered)    { button4.BackColor = new Color (20, 20, 20); }
-            };
-			button5.StatusChanged += (s, e) =>
-            {
-                if (e.Status == FrameStatus.None)       { button5.BackColor = Color.Zero; }
-                if (e.Status == FrameStatus.Hovered)    { button5.BackColor = new Color (20, 20, 20); }
-            };
-			button6.StatusChanged += (s, e) =>
-            {
-                if (e.Status == FrameStatus.None)       { button6.BackColor = Color.Zero; }
-                if (e.Status == FrameStatus.Hovered)    { button6.BackColor = new Color (20, 20, 20); }
-            };
+			
+			
 			resetBtn.StatusChanged += (s, e) =>
             {
                 if (e.Status == FrameStatus.None)       { resetBtn.BackColor = Color.Zero; }
@@ -261,6 +182,28 @@ namespace Proteins
 			graphSys.Unpause();
 		}
 
+		private void AddLeftButton(Frame parent, Game game, int x, int y, int btnWidth, int btnHeight, string str, Color color, List<string> actions){
+			var button = new Frame(game, x, y, btnWidth, btnHeight, str, color)
+			{
+				Font = font,
+				Border = 1,
+				BorderColor = Color.White,
+				TextAlignment = Alignment.MiddleCenter,
+			
+			};
+
+			button.StatusChanged += (s, e) =>
+            {
+                if (e.Status == FrameStatus.None)       { button.BackColor = Color.Zero; }
+                if (e.Status == FrameStatus.Hovered)    { button.BackColor = new Color (20, 20, 20); }
+            };
+
+			foreach(var a in actions){
+				button.Click += (s, e) => startPropagate(a);
+			}
+
+			parent.Add(button);
+		}
 		
 		/// <summary>
 		/// Disposes game
