@@ -120,33 +120,14 @@ namespace Proteins
 			int btnHeight = 30;
 			int padding = 5;
 			int i = 0;
-			AddLeftButton(UI.RootFrame, this, x, y + i++ * (btnHeight + padding), btnWidth, btnHeight, "блокировка YAP", Color.Zero, new List<string>{"PKCa"});
+			AddLeftButton(UI.RootFrame, this, x, y + i++ * (btnHeight + padding), btnWidth, btnHeight, "блокировка YAP", Color.Zero, () => startPropagate("PKCa"));
 			
-			AddLeftButton(UI.RootFrame, this, x, y + i++ * (btnHeight + padding), btnWidth, btnHeight, "блокировка LAT1/2", Color.Zero, new List<string>{"Ecad"});
+			AddLeftButton(UI.RootFrame, this, x, y + i++ * (btnHeight + padding), btnWidth, btnHeight, "блокировка LAT1/2", Color.Zero, () => startPropagate("Ecad"));
 						
-			AddLeftButton(UI.RootFrame, this, x, y +  i++ * (btnHeight + padding), btnWidth, btnHeight, "блокировка GSK3b", Color.Zero, new List<string>{"FZD"});
+			AddLeftButton(UI.RootFrame, this, x, y +  i++ * (btnHeight + padding), btnWidth, btnHeight, "блокировка GSK3b", Color.Zero, () => startPropagate("FZD"));
+			AddLeftButton(UI.RootFrame, this, x, y +  i++ * (btnHeight + padding), btnWidth, btnHeight, "исходное состояние", Color.Zero, 
+				() => ResetGraph() );
 			
-			resetBtn = new Frame(this, x, y + i++ * (btnHeight + padding), btnWidth, btnHeight, "исходное состояние", Color.Zero)
-			{
-				Font = font,
-				Border = 1,
-				BorderColor = Color.White,//Color.Red,
-				TextAlignment = Alignment.MiddleCenter
-			};
-			
-			UI.RootFrame.Add(resetBtn);
-
-
-
-			resetBtn.Click += (s, e) => ResetGraph();
-
-			
-			
-			resetBtn.StatusChanged += (s, e) =>
-            {
-                if (e.Status == FrameStatus.None)       { resetBtn.BackColor = Color.Zero; }
-                if (e.Status == FrameStatus.Hovered)    { resetBtn.BackColor = new Color (20, 20, 20); }
-            };
 
 			var gs = GetService<GraphSystem>();
 			gs.BackgroundColor = Color.Black;
@@ -182,7 +163,7 @@ namespace Proteins
 			graphSys.Unpause();
 		}
 
-		private void AddLeftButton(Frame parent, Game game, int x, int y, int btnWidth, int btnHeight, string str, Color color, List<string> actions){
+		private void AddLeftButton(Frame parent, Game game, int x, int y, int btnWidth, int btnHeight, string str, Color color, Action action){
 			var button = new Frame(game, x, y, btnWidth, btnHeight, str, color)
 			{
 				Font = font,
@@ -198,9 +179,13 @@ namespace Proteins
                 if (e.Status == FrameStatus.Hovered)    { button.BackColor = new Color (20, 20, 20); }
             };
 
-			foreach(var a in actions){
-				button.Click += (s, e) => startPropagate(a);
-			}
+			if (action != null)
+            {
+                button.Click += (s, e) =>
+                {
+                    action();
+                };
+            }		
 
 			parent.Add(button);
 		}
@@ -217,44 +202,6 @@ namespace Proteins
 				//	Do NOT dispose objects loaded using ContentManager.
 			}
 			base.Dispose(disposing);
-		}
-
-
-		void action1()
-		{
-			startPropagate("YAP");
-			Console.WriteLine("Click on 1");
-		}
-
-		void action2()
-		{
-			startPropagate("PKCa");
-			Console.WriteLine("Click on 2");
-		}
-
-		void action3()
-		{
-			startPropagate("Ecad");
-			Console.WriteLine("Click on 3");
-		}
-
-		void action4()
-		{
-			startPropagate("PKCa");
-			startPropagate("Ecad");
-			Console.WriteLine("Click on 4");
-		}
-
-		void action5()
-		{
-			startPropagate("FZD");
-			Console.WriteLine("Click on 5");
-		}
-
-		void action6()
-		{
-			startPropagate("bCAT");
-			Console.WriteLine("Click on 6");
 		}
 
 
@@ -343,31 +290,7 @@ namespace Proteins
 			//	graph.WriteToFile("../../../../graph.gr");
 			//	Log.Message("Graph saved to file");
 			//}
-			if (e.Key == Keys.D1)
-			{
-				action1();
-			}
-			if (e.Key == Keys.D2)
-			{
-				action2();
-			}
-
-			if (e.Key == Keys.D3)
-			{
-				action3();
-			}
-			if (e.Key == Keys.D4)
-			{
-				action4();
-			}
-			if (e.Key == Keys.D5)
-			{
-				action5();
-			}
-			if (e.Key == Keys.D6)
-			{
-				action6();
-			}
+			
 		}
 
 
