@@ -109,6 +109,16 @@ namespace GraphVis {
 				else { nodeScale = value; }
 			}
 		}
+		[Category("Visuals")]
+		public int NumberOfTextures
+		{
+			get { return numberOfTextures; }
+			set
+			{
+				if (value > 21) { numberOfTextures = 21; }
+				else { numberOfTextures = value; }
+			}
+		}
 
 		[Category("Advanced")]
 		public int SearchIterations { get; set; }
@@ -125,6 +135,7 @@ namespace GraphVis {
 
 		float linkOpacity;
 		float nodeScale;
+		int		numberOfTextures;
 
 		public ParticleConfig()
 		{
@@ -135,6 +146,7 @@ namespace GraphVis {
 			// Visuals:
 			EdgeOpacity			= 0.1f;
 			nodeScale			= 1.0f;
+			numberOfTextures	= 21;
 
 			// Physics constants:
 			RepulsionForce	= 1.0f;
@@ -254,6 +266,8 @@ namespace GraphVis {
 			[FieldOffset(140)] public float		nodeScale;
 			[FieldOffset(144)] public Vector4	highNodeColor;
 			[FieldOffset(160)] public Vector4	highEdgeColor;
+			[FieldOffset(176)] public float		numberOfUsedTexturesInAtlas;
+			[FieldOffset(180)] public Vector3	extraplace;
 		} 
 
 		/// <summary>
@@ -266,7 +280,7 @@ namespace GraphVis {
 			HighlightNodeColor	= new Vector4(0, 1, 0, 1);
 			HighlightEdgeColor	= new Vector4(0, 1, 0, 1);
 			BackgroundColor		= Color.White;
-			BlendMode			= BlendState.Additive; 
+			BlendMode			= BlendState.AlphaBlend; 
 			AnchorToNodes		= false;
 
 			highlightNodesList = new List<Tuple<StructuredBuffer, HighlightParams>>();
@@ -317,16 +331,11 @@ namespace GraphVis {
 		}
 
 		void Enum ( PipelineState plState, RenderFlags flag ){
-				plState.RasterizerState	= RasterizerState.CullNone;
-				plState.BlendState		= BlendState.AlphaBlend;//BlendMode;
-				plState.DepthStencilState = DepthStencilState.Default;
-				plState.Primitive		= Primitive.PointList;
+				plState.RasterizerState		= RasterizerState.CullNone;
+				plState.BlendState			= BlendMode;
+				plState.DepthStencilState	= DepthStencilState.Default;
+				plState.Primitive			= Primitive.PointList;
 
-				//if (flag.HasFlag(RenderFlags.SELECTION))
-				//{
-				//	plState.BlendState = BlendState.Screen;
-				//	plState.DepthStencilState = DepthStencilState.Readonly;
-				//}
 				if (flag.HasFlag(RenderFlags.LINE))
 				{
 					//plState.BlendState = BlendState.Screen;
@@ -789,6 +798,7 @@ namespace GraphVis {
 		void render(GraphicsDevice device, LayoutSystem ls, Params parameters, GameTime gameTime)
 		{
 			parameters.MaxParticles	= lay.ParticleCount;
+			parameters.numberOfUsedTexturesInAtlas = Config.NumberOfTextures;
 			parameters.edgeOpacity	= Config.EdgeOpacity;
 			parameters.nodeScale	= Config.NodeScale;
 			parameters.highNodeColor = HighlightNodeColor;

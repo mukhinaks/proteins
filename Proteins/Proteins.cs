@@ -35,7 +35,7 @@ namespace Proteins
 		Color nodeHighlightColorNeg;
 		SpriteFont font;
 
-		Frame resetBtn;
+		Frame rightPanel;
 
 		Random rnd = new Random();
 
@@ -65,7 +65,7 @@ namespace Proteins
 			AddService(new DebugRender(this), true, true, 9998, 9998);
 			AddService(new GraphSystem(this), true, true, 9997, 9997);
 			AddService(new GreatCircleCamera(this), true, true, 9996, 9996);
-			AddService(new UserInterface(this, "stencil"), true, true, 9995, 9995);
+			AddService(new UserInterface(this, "stencil"), true, true, 10000, 10000);
 
 			//	add here additional services :
 
@@ -89,9 +89,8 @@ namespace Proteins
 			delay2 = 3000;
 
 			//COLORS FOR HIGHLIGHT / цвета для активных
-			nodeHighlightColorNeg = new Color(221,0,41) ;// Color.Red;
-			nodeHighlightColorPos = new Color(0,221,180) ; //Color.Green;
-
+			nodeHighlightColorNeg = new Color(221,0,41) ;
+			nodeHighlightColorPos = new Color(0,221,180) ;
 		}
 
 
@@ -107,31 +106,42 @@ namespace Proteins
 			InputDevice.KeyDown += InputDevice_KeyDown;
 
 			//	load content & create graphics and audio resources here:
+			
 
 			// Add graphical user interface:
 			font = Content.Load<SpriteFont>("alsNormal");
 			var UI = GetService<UserInterface>();
 			UI.RootFrame = new Frame(this, 0, 0, 800, 600, "", Color.Zero);
 
-			//Buttons coords / кнопки
+			GraphicsDevice.DisplayBoundsChanged += (s, e) =>
+			{
+				UI.RootFrame.Width = GraphicsDevice.DisplayBounds.Width;
+				UI.RootFrame.Height = GraphicsDevice.DisplayBounds.Height;
+
+				rightPanel.X = GraphicsDevice.DisplayBounds.Width - rightPanel.Width;
+				rightPanel.Height = GraphicsDevice.DisplayBounds.Height;
+			};
+
+			rightPanel = new Frame(this, GraphicsDevice.DisplayBounds.Width - 300, 0, 300, 600, "", new Color (255, 255, 255, 30));
+			UI.RootFrame.Add(rightPanel);
+
+			//Buttons / кнопки
 			int x = 10;
 			int y = 10; // отступ сверху offset 
 			int btnWidth = 200;
 			int btnHeight = 30;
 			int padding = 5;
 			int i = 0;
-			AddLeftButton(UI.RootFrame, this, x, y + i++ * (btnHeight + padding), btnWidth, btnHeight, "блокировка YAP", Color.Zero, () => startPropagate("PKCa"));
-			
-			AddLeftButton(UI.RootFrame, this, x, y + i++ * (btnHeight + padding), btnWidth, btnHeight, "блокировка LAT1/2", Color.Zero, () => startPropagate("Ecad"));
-						
-			AddLeftButton(UI.RootFrame, this, x, y +  i++ * (btnHeight + padding), btnWidth, btnHeight, "блокировка GSK3b", Color.Zero, () => startPropagate("FZD"));
-			AddLeftButton(UI.RootFrame, this, x, y +  i++ * (btnHeight + padding), btnWidth, btnHeight, "исходное состояние", Color.Zero, 
+			AddButton(UI.RootFrame, this, x, y + i++ * (btnHeight + padding), btnWidth, btnHeight, "блокировка YAP", Color.Zero, () => startPropagate("PKCa"));			
+			AddButton(UI.RootFrame, this, x, y + i++ * (btnHeight + padding), btnWidth, btnHeight, "блокировка LAT1/2", Color.Zero, () => startPropagate("Ecad"));						
+			AddButton(UI.RootFrame, this, x, y + i++ * (btnHeight + padding), btnWidth, btnHeight, "блокировка GSK3b", Color.Zero, () => startPropagate("FZD"));
+			AddButton(UI.RootFrame, this, x, y + i++ * (btnHeight + padding), btnWidth, btnHeight, "исходное состояние", Color.Zero, 
 				() => ResetGraph() );
-			
+			UI.SettleControls();
 
 			var gs = GetService<GraphSystem>();
 			gs.BackgroundColor = Color.Black;
-			gs.BlendMode = BlendState.AlphaBlend; //BlendState.Additive;
+			gs.BlendMode = BlendState.AlphaBlend; 
 
 			protGraph.ReadFromFile("../../../../signalling_table.csv");
 
@@ -148,10 +158,10 @@ namespace Proteins
 
 			// add categories of nodes with different localization:
 			// category 1 (membrane):
-			graphSys.AddCategory(membrane, new Vector3(0, 0, 0), 700);
+			graphSys.AddCategory(membrane, new Vector3(0, 0, 0), 500);
 
 			// category 2 (cytoplasm):
-			graphSys.AddCategory(cytoplasm, new Vector3(0, 0, 0), 300);
+			graphSys.AddCategory(cytoplasm, new Vector3(0, 0, 0), 200);
 
 			// category 3 (nucleus):
 			graphSys.AddCategory(nucleus, new Vector3(0, 0, 0), 100);
@@ -163,7 +173,7 @@ namespace Proteins
 			graphSys.Unpause();
 		}
 
-		private void AddLeftButton(Frame parent, Game game, int x, int y, int btnWidth, int btnHeight, string str, Color color, Action action){
+		private void AddButton(Frame parent, Game game, int x, int y, int btnWidth, int btnHeight, string str, Color color, Action action){
 			var button = new Frame(game, x, y, btnWidth, btnHeight, str, color)
 			{
 				Font = font,
@@ -351,10 +361,7 @@ namespace Proteins
 			base.Draw(gameTime, stereoEye);
 
 			//	Draw stuff here :
-			GetService<UserInterface>().Draw(gameTime, stereoEye);
-			var sb = GetService<SpriteBatch>();
-			font.DrawString(sb, s,  GraphicsDevice.DisplayBounds.Width - font.MeasureString(s).Width - 10, GraphicsDevice.DisplayBounds.Height - font.CapHeight, Color.White);	
-
+			
 		}
 
 

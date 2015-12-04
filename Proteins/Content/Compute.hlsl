@@ -89,8 +89,8 @@ float4 springForce( float4 pos, float4 otherPos ) // 4th component in otherPos i
 	float3 R			= (otherPos - pos).xyz;
 	float Rabs			= length( R ) + 0.1f;
 	float deltaR		= Rabs - otherPos.w;
-	float absForce		= pos.w * ( deltaR ) / ( Rabs );
-	float energy		= 0.5f * pos.w * deltaR * deltaR;
+	float absForce		= pow(pos.w, 0.5f) * ( deltaR ) / ( Rabs );
+	float energy		= 0.5f * pow(pos.w, 0.5f) * deltaR * deltaR;
 	return float4( mul( absForce, R ), energy );  // we write energy into the 4th component
 }
 

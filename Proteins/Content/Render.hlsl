@@ -11,6 +11,7 @@ struct PARAMS {
 	float		nodeScale;
 	float4		nodeColor;
 	float4		edgeColor;
+	float		numberofTextures;
 };
 
 cbuffer CB1 : register(b0) { 
@@ -129,7 +130,8 @@ void GSMain( point VSOutput inputPoint[1], inout TriangleStream<GSOutput> output
 	float4 pos		=	float4( prt.Position.xyz, 1 );
 #endif // ABSOLUTE_POS
 
-	float texDist = 1.0f / (float)Params.MaxParticles;
+	float texDist = 1.0f / (float) Params.numberofTextures;
+	if(id > Params.numberofTextures) id = 1;
 
 	float4 posV		=	mul( pos, Params.View );
 

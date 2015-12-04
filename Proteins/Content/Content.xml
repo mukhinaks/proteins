@@ -91,7 +91,7 @@
     <CSEntryPoint>CSMain</CSEntryPoint>
     <SourceFile>Compute.hlsl</SourceFile>
     <ShowPemutations>false</ShowPemutations>
-    <ListingPath>C:\GitHub\proteins\Proteins\Content\Temp\1899D2215792452F122591D2CF41D839.html</ListingPath>
+    <ListingPath>D:\proteins\Proteins\Content\Temp\1899D2215792452F122591D2CF41D839.html</ListingPath>
   </Asset>
   <Asset xsi:type="UbershaderAsset">
     <AssetPath>Render.hlsl</AssetPath>
